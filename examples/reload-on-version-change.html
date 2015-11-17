@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title>Example - Reload on version change</title>
+</head>
+<body>
+
+<p>
+    We have polled for changes <span id="number">0</span> time<span id="plural">s</span>.
+    Change the value in version.json to watch this page reload itself.
+</p>
+
+
+<script type="text/javascript" src="../dist/reload.js"></script>
+<script type="text/javascript">
+    (function(document) {
+
+
+        reload.ifThisChangesOverTime('version.json', 5000, getVersionAndIncrement);
+
+
+        function getVersionAndIncrement(data) {
+            increment(); // For demo purposes only
+            return data.version;
+        }
+
+
+        ////////////////////////////////////////
+        // Demo-specific code follows
+        ////////////////////////////////////////
+
+        var numberOfTimes = 0;
+
+
+        function increment() {
+            numberOfTimes++;
+            setNumberOfTimes(numberOfTimes);
+            setPlural(numberOfTimes);
+        }
+
+
+        function setNumberOfTimes(times) {
+            setInnerHtmlOfElementWithId('number', times);
+        }
+
+
+        function setPlural(times) {
+            if (times == 0 || times > 1) {
+                setInnerHtmlOfElementWithId('plural', 's');
+            } else if (times == 1) {
+                setInnerHtmlOfElementWithId('plural', '');
+            } else {
+                console.info("This isn't some kind of time machine");
+            }
+        }
+
+
+        function setInnerHtmlOfElementWithId(id, value) {
+            document.getElementById(id).innerHTML = value;
+        }
+
+
+    })(document);
+</script>
+</body>
+</html>
